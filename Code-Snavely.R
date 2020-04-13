@@ -49,3 +49,5 @@ ggmap(cvillemap) +
   geom_path(data = df1c, color = "red", size = 1, lineend = "round") +
   geom_path(data = df2a, color = "blue", size = 2.5, lineend = "round") +
   geom_path(data = df2b, color = "blue", size = 2.5, lineend = "round")
+
+#newcomment
