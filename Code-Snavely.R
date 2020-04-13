@@ -18,7 +18,7 @@ library(tidyverse)
 library(ggplot2)
 library(ggmap)
 library(xlsx)
-setwd("C:/users/jeff/Documents/R/uva2/")
+setwd("/users/sisisnavely/Dektop/GitHub/Sys2202-final-transit/")
 cvillemap <- get_map(location = c(-78.4800, 38.0450), maptype = "roadmap", 
                      source = "google", zoom = 13, color="bw")
 dfroute1=read.xlsx("route1.xlsx",sheetIndex=1)
