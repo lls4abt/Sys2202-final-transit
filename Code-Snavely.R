@@ -19,8 +19,12 @@ library(ggplot2)
 library(ggmap)
 library(xlsx)
 setwd("/users/sisisnavely/Dektop/GitHub/Sys2202-final-transit/")
+
+#set map to Charlottesville 
 cvillemap <- get_map(location = c(-78.4800, 38.0450), maptype = "roadmap", 
                      source = "google", zoom = 13, color="bw")
+
+#map routes 1 and 2
 dfroute1=read.xlsx("route1.xlsx",sheetIndex=1)
 dfroute2=read.xlsx("route2.xlsx",sheetIndex=1)
 df1a <- filter(dfroute1,route =="1a") %>%
