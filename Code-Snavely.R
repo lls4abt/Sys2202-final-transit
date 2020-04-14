@@ -18,7 +18,7 @@ library(tidyverse)
 library(ggplot2)
 library(ggmap)
 library(xlsx)
-setwd("/users/sisisnavely/Dektop/GitHub/Sys2202-final-transit/")
+setwd("/users/sisisnavely/Desktop/GitHub/Sys2202-final-transit/")
 
 #set map to Charlottesville 
 cvillemap <- get_map(location = c(-78.4800, 38.0450), maptype = "roadmap", 
@@ -54,4 +54,3 @@ ggmap(cvillemap) +
   geom_path(data = df2a, color = "blue", size = 2.5, lineend = "round") +
   geom_path(data = df2b, color = "blue", size = 2.5, lineend = "round")
 
-#newcomment
