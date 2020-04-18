@@ -8,15 +8,28 @@ library(ggmap)
 
 # save api key
 register_google(key = "AIzaSyAAFM75kpNklj1RJrsAyGWDl4lYjD3Rn5g")
-
+#
 install.packages("xlsx")
+install.packages("reshape")
+install.packages("Rcpp")
+install.packages("gifski")
+install.packages("gganimate")
+install.packages("ggplot2")
+install.packages("ggmap")
+instal.packages("tidyverse")
+#
 library(tidyverse)
 library(ggplot2)
 library(ggmap)
 library(xlsx)
+library(reshape)
+library(gganimate)
+#
 setwd("C:/users/sisisnavely/Desktop/GitHub/Sys2202-final-transit/")
+#
 cvillemap <- get_map(location = c(-78.4800, 38.0450), maptype = "roadmap", 
                      source = "google", zoom = 13, color="bw")
+#
 dfroute1=read.xlsx("routes.xlsx",sheetIndex=1)
 dfroute2=read.xlsx("routes.xlsx",sheetIndex=2)
 dfroute3=read.xlsx("routes.xlsx",sheetIndex=3)
@@ -30,69 +43,274 @@ dfroute10=read.xlsx("routes.xlsx",sheetIndex=10)
 dfroute11=read.xlsx("routes.xlsx",sheetIndex=11)
 dfroute12=read.xlsx("routes.xlsx",sheetIndex=12)
 dfroute13=read.xlsx("routes.xlsx",sheetIndex=13)
+dfriders=read.xlsx("routes.xlsx",sheetIndex=14)
+#
+dfr <- filter(dfriders,type == "norm") %>%
+  select(route,jan,feb,mar,apr,may,jun,jul,aug,sep,oct,nov,dec)
+colnames(dfr) <- c("route","01-JAN","02-FEB","03-MAR","04-APR","05-MAY"
+                   ,"06-JUN","07-JUL","08-AUG","09-SEP","10-OCT","11-NOV","12-DEC")
+dfr <- 	melt(dfr,id=(c("route")))
+colnames(dfr) <- c("route","month","riders")
+dfr <- arrange(dfr,route,month)
+#
 df1 <- filter(dfroute1,route == 1 & seg == "a") %>%
   mutate(locclean=str_remove_all(loc,"[^[A-Za-z0-9.,-]]")) %>%
   separate(locclean,c("lon","lat"),sep=",") %>% select(lon,lat,seq,route) %>%
   mutate(lon=as.numeric(lon),lat=as.numeric(lat))
+df1 <- merge(df1,dfr,id="route") %>% arrange(month,route,seq)
+#
 df2 <- filter(dfroute2,route == 2) %>%
   mutate(locclean=str_remove_all(loc,"[^[A-Za-z0-9.,-]]")) %>%
   separate(locclean,c("lon","lat"),sep=",") %>% select(lon,lat,seq,route) %>%
   mutate(lon=as.numeric(lon),lat=as.numeric(lat))
+df2 <- merge(df2,dfr,id="route") %>% arrange(month,route,seq)
+#
 df3 <- filter(dfroute3,route == 3 & seg == "b") %>%
   mutate(locclean=str_remove_all(loc,"[^[A-Za-z0-9.,-]]")) %>%
   separate(locclean,c("lon","lat"),sep=",") %>% select(lon,lat,seq,route) %>%
   mutate(lon=as.numeric(lon),lat=as.numeric(lat))
+df3 <- merge(df3,dfr,id="route") %>% arrange(month,route,seq)
+#
 df4 <- filter(dfroute4,route == 4 & seg == "b") %>%
   mutate(locclean=str_remove_all(loc,"[^[A-Za-z0-9.,-]]")) %>%
   separate(locclean,c("lon","lat"),sep=",") %>% select(lon,lat,seq,route) %>%
   mutate(lon=as.numeric(lon),lat=as.numeric(lat))
+df4 <- merge(df4,dfr,id="route") %>% arrange(month,route,seq)
+#
 df5 <- filter(dfroute5,route == 5 & seg == "a") %>%
   mutate(locclean=str_remove_all(loc,"[^[A-Za-z0-9.,-]]")) %>%
   separate(locclean,c("lon","lat"),sep=",") %>% select(lon,lat,seq,route) %>%
   mutate(lon=as.numeric(lon),lat=as.numeric(lat))
+df5 <- merge(df5,dfr,id="route") %>% arrange(month,route,seq)
+#
 df6 <- filter(dfroute6,route == 6 & seg == "a") %>%
   mutate(locclean=str_remove_all(loc,"[^[A-Za-z0-9.,-]]")) %>%
   separate(locclean,c("lon","lat"),sep=",") %>% select(lon,lat,seq,route) %>%
   mutate(lon=as.numeric(lon),lat=as.numeric(lat))
+df6 <- merge(df6,dfr,id="route") %>% arrange(month,route,seq)
+#
 df7 <- filter(dfroute7,route == 7 & seg == "a") %>%
   mutate(locclean=str_remove_all(loc,"[^[A-Za-z0-9.,-]]")) %>%
   separate(locclean,c("lon","lat"),sep=",") %>% select(lon,lat,seq,route) %>%
   mutate(lon=as.numeric(lon),lat=as.numeric(lat))
+df7 <- merge(df7,dfr,id="route") %>% arrange(month,route,seq)
+#
 df8 <- filter(dfroute8,route == 8 & seg == "b") %>%
   mutate(locclean=str_remove_all(loc,"[^[A-Za-z0-9.,-]]")) %>%
   separate(locclean,c("lon","lat"),sep=",") %>% select(lon,lat,seq,route) %>%
   mutate(lon=as.numeric(lon),lat=as.numeric(lat))
+df8 <- merge(df8,dfr,id="route") %>% arrange(month,route,seq)
+#
 df9 <- filter(dfroute9,route == 9 & seg == "a") %>%
   mutate(locclean=str_remove_all(loc,"[^[A-Za-z0-9.,-]]")) %>%
   separate(locclean,c("lon","lat"),sep=",") %>% select(lon,lat,seq,route) %>%
   mutate(lon=as.numeric(lon),lat=as.numeric(lat))
+df9 <- merge(df9,dfr,id="route") %>% arrange(month,route,seq)
+#
 df10 <- filter(dfroute10,route == 10 & seg == "a") %>%
   mutate(locclean=str_remove_all(loc,"[^[A-Za-z0-9.,-]]")) %>%
   separate(locclean,c("lon","lat"),sep=",") %>% select(lon,lat,seq,route) %>%
   mutate(lon=as.numeric(lon),lat=as.numeric(lat))
+df10 <- merge(df10,dfr,id="route") %>% arrange(month,route,seq)
+#
 df11 <- filter(dfroute11,route == 11 & seg == "b") %>%
   mutate(locclean=str_remove_all(loc,"[^[A-Za-z0-9.,-]]")) %>%
   separate(locclean,c("lon","lat"),sep=",") %>% select(lon,lat,seq,route) %>%
   mutate(lon=as.numeric(lon),lat=as.numeric(lat))
+df11 <- merge(df11,dfr,id="route") %>% arrange(month,route,seq)
+#
 df12 <- filter(dfroute12,route == 12 & seg == "a") %>%
   mutate(locclean=str_remove_all(loc,"[^[A-Za-z0-9.,-]]")) %>%
   separate(locclean,c("lon","lat"),sep=",") %>% select(lon,lat,seq,route) %>%
   mutate(lon=as.numeric(lon),lat=as.numeric(lat))
+df12 <- merge(df12,dfr,id="route") %>% arrange(month,route,seq)
+#
 dft <- filter(dfroute13,route == 13 & seg == "a") %>%
   mutate(locclean=str_remove_all(loc,"[^[A-Za-z0-9.,-]]")) %>%
   separate(locclean,c("lon","lat"),sep=",") %>% select(lon,lat,seq,route) %>%
   mutate(lon=as.numeric(lon),lat=as.numeric(lat))
-ggmap(cvillemap) + 
-  geom_path(data = df1, color = "red", size = 1, lineend = "round") +
-  geom_path(data = df2, color = "blue", size = 2.5, lineend = "round") +
-  geom_path(data = df3, color = "green", size = 2.5, lineend = "round") +
-  geom_path(data = df4, color = "coral4", size = 2.5, lineend = "round") +
-  geom_path(data = df5, color = "firebrick3", size = 2.5, lineend = "round") +
-  geom_path(data = df6, color = "gold2", size = 2.5, lineend = "round") +
-  geom_path(data = df7, color = "darkorange3", size = 2.5, lineend = "round") +
-  geom_path(data = df8, color = "darkolivegreen", size = 2.5, lineend = "round") +
-  geom_path(data = df9, color = "turquoise", size = 2.5, lineend = "round") +
-  geom_path(data = df10, color = "salmon1", size = 2.5, lineend = "round") +
-  geom_path(data = df11, color = "plum4", size = 2.5, lineend = "round") +
-  geom_path(data = df12, color = "yellow", size = 1, linetype = 2, lineend = "round") +
-  geom_path(data = dft, color = "blueviolet", size = 2.5, lineend = "round")
+dft <- merge(dft,dfr,id="route") %>% arrange(month,route,seq)
+#
+animap <- ggmap(cvillemap) + 
+  geom_path(data = df1, color = "red", size = df1$riders * 3 + .6, lineend = "round") +
+  geom_path(data = df2, color = "blue", size = df2$riders * 3 + .6, lineend = "round") +
+  geom_path(data = df3, color = "green", size = df3$riders * 3 + .6, lineend = "round") +
+  geom_path(data = df4, color = "coral4", size = df4$riders * 3 + .6, lineend = "round") +
+  geom_path(data = df5, color = "firebrick3", size = df5$riders * 3 + .6, lineend = "round") +
+  geom_path(data = df6, color = "gold2", size = df6$riders * 3 + .6, lineend = "round") +
+  geom_path(data = df7, color = "darkorange3", size = df7$riders * 3 + .6, lineend = "round") +
+  geom_path(data = df8, color = "darkolivegreen", size = df8$riders * 3 + .6, lineend = "round") +
+  geom_path(data = df9, color = "turquoise", size = df9$riders * 3 + .6, lineend = "round") +
+  geom_path(data = df10, color = "salmon1", size = df10$riders * 3 + .6, lineend = "round") +
+  geom_path(data = df11, color = "plum4", size = df11$riders * 3 + .6, lineend = "round") +
+  geom_path(data = df12, color = "yellow", size = df12$riders * 3 + .6, linetype = 2, lineend = "round") +
+  geom_path(data = dft, color = "blueviolet", size = dft$riders * 3 + .6, lineend = "round") +
+  labs(title="Month: {current_frame}") +
+  transition_manual(month)
+#
+animapr1 <- ggmap(cvillemap) + 
+  geom_path(data = df1, color = "red", size = df1$riders * 3 + .6, lineend = "round") +
+  labs(title="Month: {current_frame}") +
+  transition_manual(month)
+#
+animapr2 <- ggmap(cvillemap) + 
+  geom_path(data = df2, color = "blue", size = df2$riders * 3 + .6, lineend = "round") +
+  labs(title="Month: {current_frame}") +
+  transition_manual(month)
+#
+animapr3 <- ggmap(cvillemap) + 
+  geom_path(data = df3, color = "green", size = df3$riders * 3 + .6, lineend = "round") +
+  labs(title="Month: {current_frame}") +
+  transition_manual(month)
+#
+animapr4 <- ggmap(cvillemap) + 
+  geom_path(data = df4, color = "coral4", size = df4$riders * 3 + .6, lineend = "round") +
+  labs(title="Month: {current_frame}") +
+  transition_manual(month)
+#
+animapr5 <- ggmap(cvillemap) + 
+  geom_path(data = df5, color = "firebrick3", size = df5$riders * 3 + .6, lineend = "round") +
+  labs(title="Month: {current_frame}") +
+  transition_manual(month)
+#
+animapr6 <- ggmap(cvillemap) + 
+  geom_path(data = df6, color = "gold2", size = df6$riders * 3 + .6, lineend = "round") +
+  labs(title="Month: {current_frame}") +
+  transition_manual(month)
+#
+animapr7 <- ggmap(cvillemap) + 
+  geom_path(data = df7, color = "darkorange3", size = df7$riders * 3 + .6, lineend = "round") +
+  labs(title="Month: {current_frame}") +
+  transition_manual(month)
+#
+animapr8 <- ggmap(cvillemap) + 
+  geom_path(data = df8, color = "darkolivegreen", size = df8$riders * 3 + .6, lineend = "round") +
+  labs(title="Month: {current_frame}") +
+  transition_manual(month)
+#
+animapr9 <- ggmap(cvillemap) + 
+  geom_path(data = df9, color = "turquoise", size = df9$riders * 3 + .6, lineend = "round") +
+  labs(title="Month: {current_frame}") +
+  transition_manual(month)
+#
+animapr10 <- ggmap(cvillemap) + 
+  geom_path(data = df10, color = "salmon1", size = df10$riders * 3 + .6, lineend = "round") +
+  labs(title="Month: {current_frame}") +
+  transition_manual(month)
+#
+animapr11 <- ggmap(cvillemap) + 
+  geom_path(data = df11, color = "plum4", size = df11$riders * 3 + .6, lineend = "round") +
+  labs(title="Month: {current_frame}") +
+  transition_manual(month)
+#
+animapr12 <- ggmap(cvillemap) + 
+  geom_path(data = df12, color = "yellow", size = df12$riders * 3 + .6, linetype = 2, lineend = "round") +
+  labs(title="Month: {current_frame}") +
+  transition_manual(month)
+#
+animaprt <- ggmap(cvillemap) + 
+  geom_path(data = dft, color = "blueviolet", size = dft$riders * 3 + .6, lineend = "round") +
+  labs(title="Month: {current_frame}") +
+  transition_manual(month)
+#
+animate(animap, renderer = gifski_renderer(), fps = 1, nframes = 24)
+anim_save("animap.gif")
+animate(animapr1, renderer = gifski_renderer(), fps = 1, nframes = 24)
+anim_save("animapr1.gif")
+animate(animapr2, renderer = gifski_renderer(), fps = 1, nframes = 24)
+anim_save("animapr2.gif")
+animate(animapr3, renderer = gifski_renderer(), fps = 1, nframes = 24)
+anim_save("animapr3.gif")
+animate(animapr4, renderer = gifski_renderer(), fps = 1, nframes = 24)
+anim_save("animapr4.gif")
+animate(animapr5, renderer = gifski_renderer(), fps = 1, nframes = 24)
+anim_save("animapr5.gif")
+animate(animapr6, renderer = gifski_renderer(), fps = 1, nframes = 24)
+anim_save("animapr6.gif")
+animate(animapr7, renderer = gifski_renderer(), fps = 1, nframes = 24)
+anim_save("animapr7.gif")
+animate(animapr8, renderer = gifski_renderer(), fps = 1, nframes = 24)
+anim_save("animapr8.gif")
+animate(animapr9, renderer = gifski_renderer(), fps = 1, nframes = 24)
+anim_save("animapr9.gif")
+animate(animapr10, renderer = gifski_renderer(), fps = 1, nframes = 24)
+anim_save("animapr10.gif")
+animate(animapr11, renderer = gifski_renderer(), fps = 1, nframes = 24)
+anim_save("animapr11.gif")
+animate(animapr12, renderer = gifski_renderer(), fps = 1, nframes = 24)
+anim_save("animapr12.gif")
+animate(animaprt, renderer = gifski_renderer(), fps = 1, nframes = 24)
+anim_save("animaprt.gif")
+#
+dftmo <- filter(dft,month == "01-JAN")
+maprtmo <- ggmap(cvillemap) + 
+  geom_path(data = dftmo, color = "blueviolet", size = dftmo$riders * 3 + .6) +
+  ggtitle(paste("Trolley:",dftmo$month))
+ggsave("maprt01jan.png")
+#
+dftmo <- filter(dft,month == "02-FEB")
+maprtmo <- ggmap(cvillemap) + 
+  geom_path(data = dftmo, color = "blueviolet", size = dftmo$riders * 3 + .6) +
+  ggtitle(paste("Trolley:",dftmo$month))
+ggsave("maprt02feb.png")
+#
+dftmo <- filter(dft,month == "03-MAR")
+maprtmo <- ggmap(cvillemap) + 
+  geom_path(data = dftmo, color = "blueviolet", size = dftmo$riders * 3 + .6) +
+  ggtitle(paste("Trolley:",dftmo$month))
+ggsave("maprt03mar.png")
+#
+dftmo <- filter(dft,month == "04-APR")
+maprtmo <- ggmap(cvillemap) + 
+  geom_path(data = dftmo, color = "blueviolet", size = dftmo$riders * 3 + .6) +
+  ggtitle(paste("Trolley:",dftmo$month))
+ggsave("maprt04apr.png")
+#
+dftmo <- filter(dft,month == "05-MAY")
+maprtmo <- ggmap(cvillemap) + 
+  geom_path(data = dftmo, color = "blueviolet", size = dftmo$riders * 3 + .6) +
+  ggtitle(paste("Trolley:",dftmo$month))
+ggsave("maprt05may.png")
+#
+dftmo <- filter(dft,month == "06-JUN")
+maprtmo <- ggmap(cvillemap) + 
+  geom_path(data = dftmo, color = "blueviolet", size = dftmo$riders * 3 + .6) +
+  ggtitle(paste("Trolley:",dftmo$month))
+ggsave("maprt06jun.png")
+#
+dftmo <- filter(dft,month == "07-JUL")
+maprtmo <- ggmap(cvillemap) + 
+  geom_path(data = dftmo, color = "blueviolet", size = dftmo$riders * 3 + .6) +
+  ggtitle(paste("Trolley:",dftmo$month))
+ggsave("maprt07jul.png")
+#
+dftmo <- filter(dft,month == "08-AUG")
+maprtmo <- ggmap(cvillemap) + 
+  geom_path(data = dftmo, color = "blueviolet", size = dftmo$riders * 3 + .6) +
+  ggtitle(paste("Trolley:",dftmo$month))
+ggsave("maprt08aug.png")
+#
+dftmo <- filter(dft,month == "09-SEP")
+maprtmo <- ggmap(cvillemap) + 
+  geom_path(data = dftmo, color = "blueviolet", size = dftmo$riders * 3 + .6) +
+  ggtitle(paste("Trolley:",dftmo$month))
+ggsave("maprt09sep.png")
+#
+dftmo <- filter(dft,month == "10-OCT")
+maprtmo <- ggmap(cvillemap) + 
+  geom_path(data = dftmo, color = "blueviolet", size = dftmo$riders * 3 + .6) +
+  ggtitle(paste("Trolley:",dftmo$month))
+ggsave("maprt10oct.png")
+#
+dftmo <- filter(dft,month == "11-NOV")
+maprtmo <- ggmap(cvillemap) + 
+  geom_path(data = dftmo, color = "blueviolet", size = dftmo$riders * 3 + .6) +
+  ggtitle(paste("Trolley:",dftmo$month))
+ggsave("maprt11nov.png")
+#
+dftmo <- filter(dft,month == "12-DEC")
+maprtmo <- ggmap(cvillemap) + 
+  geom_path(data = dftmo, color = "blueviolet", size = dftmo$riders * 3 + .6) +
+  ggtitle(paste("Trolley:",dftmo$month))
+ggsave("maprt12dec.png")
+#
