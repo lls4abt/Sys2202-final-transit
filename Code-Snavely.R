@@ -25,7 +25,7 @@ library(xlsx)
 library(reshape)
 library(gganimate)
 #
-setwd("C:/users/sisisnavely/Desktop/GitHub/Sys2202-final-transit/")
+setwd("/users/sisisnavely/Desktop/GitHub/Sys2202-final-transit/")
 #
 cvillemap <- get_map(location = c(-78.4800, 38.0450), maptype = "roadmap", 
                      source = "google", zoom = 13, color="bw")
@@ -314,3 +314,78 @@ maprtmo <- ggmap(cvillemap) +
   ggtitle(paste("Trolley:",dftmo$month))
 ggsave("maprt12dec.png")
 #
+
+#
+install.packages("shiny")
+library(shiny)
+
+#
+ui <- fluidPage(
+  fluidRow(column(4,h3("Charlottesville Area Transit Ridership")),
+           column(8,  selectInput("route", "Route:", c("All Routes" = "all"
+                                                       ,"Route 1" = "r1","Route 2" = "r2","Route 3" = "r3"
+                                                       ,"Route 4" = "r4","Route 5" = "r5","Route 6" ="r6"
+                                                       ,"Route 7" = "r7","Route 8" = "r8", "Route 9" = "r9"
+                                                       ,"Route 10" = "r10", "Route 11" = "r11", "Route 12" = "r12"
+                                                       ,"Trolley" = "rt", "Trolley Monthly" = "rtmo")))
+  ),
+  mainPanel(
+    conditionalPanel(
+      condition="input.route!='rtmo'",
+      imageOutput("outRoute")
+    ),
+    conditionalPanel(
+      condition = "input.route=='rtmo'",
+      fluidRow(column(4,div(style="height:50px"),imageOutput("outm01")),
+               column(4,div(style="height:50px"),imageOutput("outm02")),
+               column(4,div(style="height:50px"),imageOutput("outm03")) ),
+      fluidRow(column(4,div(style="font-size:10px; padding: 0px 0px; margin-top:-25em"),imageOutput("outm04")),
+               column(4,div(style="font-size:10px; padding: 0px 0px; margin-top:-25em"),imageOutput("outm05")),
+               column(4,div(style="font-size:10px; padding: 0px 0px; margin-top:-25em"),imageOutput("outm06")) ),
+      fluidRow(column(4,div(style="font-size:10px; padding: 0px 0px; margin-top:-25em"),imageOutput("outm07")),
+               column(4,div(style="font-size:10px; padding: 0px 0px; margin-top:-25em"),imageOutput("outm08")),
+               column(4,div(style="font-size:10px; padding: 0px 0px; margin-top:-25em"),imageOutput("outm09")) ),
+      fluidRow(column(4,div(style="font-size:10px; padding: 0px 0px; margin-top:-25em"),imageOutput("outm10")),
+               column(4,div(style="font-size:10px; padding: 0px 0px; margin-top:-25em"),imageOutput("outm11")),
+               column(4,div(style="font-size:10px; padding: 0px 0px; margin-top:-25em"),imageOutput("outm12")) )
+    )
+  )
+)
+
+
+#
+server <- function(input, output, session) {
+  output$outRoute <- renderImage(
+    {list(src=if(input$route=="all") {"animap.gif"}
+          else {paste0("animap",input$route,".gif")},
+          contentType = 'image/gif',width = 800,height = 600)},deleteFile = FALSE)
+  output$outm01 <- renderImage({list(src="maprt01jan.png",contentType = 'image/gif',
+                                     width = 200,height = 150)},deleteFile = FALSE)
+  output$outm02 <- renderImage({list(src="maprt02feb.png",contentType = 'image/gif'
+                                     ,width = 200,height = 150)},deleteFile = FALSE)
+  output$outm03 <- renderImage({list(src="maprt03mar.png",contentType = 'image/gif'
+                                     ,width = 200,height = 150)},deleteFile = FALSE)
+  output$outm04 <- renderImage({list(src="maprt04apr.png",contentType = 'image/gif'
+                                     ,width = 200,height = 150)},deleteFile = FALSE)
+  output$outm05 <- renderImage({list(src="maprt05may.png",contentType = 'image/gif'
+                                     ,width = 200,height = 150)},deleteFile = FALSE)
+  output$outm06 <- renderImage({list(src="maprt06jun.png",contentType = 'image/gif'
+                                     ,width = 200,height = 150)},deleteFile = FALSE)
+  output$outm07 <- renderImage({list(src="maprt07jul.png",contentType = 'image/gif'
+                                     ,width = 200,height = 150)},deleteFile = FALSE)
+  output$outm08 <- renderImage({list(src="maprt08aug.png",contentType = 'image/gif'
+                                     ,width = 200,height = 150)},deleteFile = FALSE)
+  output$outm09 <- renderImage({list(src="maprt09sep.png",contentType = 'image/gif'
+                                     ,width = 200,height = 150)},deleteFile = FALSE)
+  output$outm10 <- renderImage({list(src="maprt10oct.png",contentType = 'image/gif'
+                                     ,width = 200,height = 150)},deleteFile = FALSE)
+  output$outm11 <- renderImage({list(src="maprt11nov.png",contentType = 'image/gif'
+                                     ,width = 200,height = 150)},deleteFile = FALSE)
+  output$outm12 <- renderImage({list(src="maprt12dec.png",contentType = 'image/gif'
+                                     ,width = 200,height = 150)},deleteFile = FALSE)
+}
+#
+
+shinyApp(ui, server)
+#
+
