@@ -7,8 +7,10 @@ library(ggmap)
 #> Please cite ggmap if you use it: see citation("ggmap") for details.
 
 # save api key
+#paid for key that allows for the access of GoogleMaps in R Studio
 register_google(key = "AIzaSyAAFM75kpNklj1RJrsAyGWDl4lYjD3Rn5g")
-#
+
+#packages that need to be installed
 install.packages("xlsx")
 install.packages("reshape")
 install.packages("Rcpp")
@@ -17,19 +19,26 @@ install.packages("gganimate")
 install.packages("ggplot2")
 install.packages("ggmap")
 instal.packages("tidyverse")
-#
+
+#libraries that need to be loaded
 library(tidyverse)
 library(ggplot2)
 library(ggmap)
 library(xlsx)
 library(reshape)
 library(gganimate)
-#
+
+#this is the address to the folder where the excel sheet is located
+#this will need to be adjusted if ran on a different computer
 setwd("/users/sisisnavely/Desktop/GitHub/Sys2202-final-transit/")
-#
+
+#zooming in on a map to show Charlottesville
+#particularly the area of Charlottesville where the CAT bus routes rub
 cvillemap <- get_map(location = c(-78.4800, 38.0450), maptype = "roadmap", 
                      source = "google", zoom = 13, color="bw")
-#
+
+#saving each page of the excel to a data frame corresponding to its route
+#each sheet of the excel file has all of the longitude & latitude cordinates that make up the particular route
 dfroute1=read.xlsx("routes.xlsx",sheetIndex=1)
 dfroute2=read.xlsx("routes.xlsx",sheetIndex=2)
 dfroute3=read.xlsx("routes.xlsx",sheetIndex=3)
@@ -43,22 +52,40 @@ dfroute10=read.xlsx("routes.xlsx",sheetIndex=10)
 dfroute11=read.xlsx("routes.xlsx",sheetIndex=11)
 dfroute12=read.xlsx("routes.xlsx",sheetIndex=12)
 dfroute13=read.xlsx("routes.xlsx",sheetIndex=13)
+
+#saving the average rider data per route per month to a data fram
 dfriders=read.xlsx("routes.xlsx",sheetIndex=14)
-#
+
+#creating a new data frame based on the rider ship data
+#this data frame gives a normalized score to each month of each route
+#the scores range from NUMBER to NUMBER because these are acceptable widths to show when plotting the routes
 dfr <- filter(dfriders,type == "norm") %>%
   select(route,jan,feb,mar,apr,may,jun,jul,aug,sep,oct,nov,dec)
 colnames(dfr) <- c("route","01-JAN","02-FEB","03-MAR","04-APR","05-MAY"
                    ,"06-JUN","07-JUL","08-AUG","09-SEP","10-OCT","11-NOV","12-DEC")
+
+#organizes the data frame so there are three columns: the route number, the month, and the normalized ridership score
 dfr <- 	melt(dfr,id=(c("route")))
 colnames(dfr) <- c("route","month","riders")
+
+#orders the data so all of route 1 data rows come first, then all of route 2, then all of route 3, etc.
 dfr <- arrange(dfr,route,month)
-#
+
+#filtering out the data frame for route 1
+#only need segment a; segments b and c are just repeats of segment a traveling in a different direction
+#separate latitude and longitude by identifying comma as the separator
+#final columns selected for this cleaned and processed data frame will be longitude, latitude, sequence, and route
+#make sure longitude and latitude columns are numeric and not string
 df1 <- filter(dfroute1,route == 1 & seg == "a") %>%
   mutate(locclean=str_remove_all(loc,"[^[A-Za-z0-9.,-]]")) %>%
   separate(locclean,c("lon","lat"),sep=",") %>% select(lon,lat,seq,route) %>%
   mutate(lon=as.numeric(lon),lat=as.numeric(lat))
+
+#merging the mapping data with the ridership data for each route into one dataframe
 df1 <- merge(df1,dfr,id="route") %>% arrange(month,route,seq)
-#
+
+####SAME STEPS AS ABOVE BUT FOR ROUTES #2-13, route 13 will become known as route t or the trolley route####
+
 df2 <- filter(dfroute2,route == 2) %>%
   mutate(locclean=str_remove_all(loc,"[^[A-Za-z0-9.,-]]")) %>%
   separate(locclean,c("lon","lat"),sep=",") %>% select(lon,lat,seq,route) %>%
@@ -130,7 +157,14 @@ dft <- filter(dfroute13,route == 13 & seg == "a") %>%
   separate(locclean,c("lon","lat"),sep=",") %>% select(lon,lat,seq,route) %>%
   mutate(lon=as.numeric(lon),lat=as.numeric(lat))
 dft <- merge(dft,dfr,id="route") %>% arrange(month,route,seq)
-#
+
+#### ANIMATION MAP FOUR ALL 13 ROUTES ####
+#mapping the collection of location points of each route into a path/route
+#giving each route a different color
+#route 12 is assigned linetype 2 (a dotted line) so it can be seen since it overlaps other routes
+#then animating the map by telling it to transition through the 12 months
+#also including a title that displays the current mont of the animation
+
 animap <- ggmap(cvillemap) + 
   geom_path(data = df1, color = "red", size = df1$riders * 3 + .6, lineend = "round") +
   geom_path(data = df2, color = "blue", size = df2$riders * 3 + .6, lineend = "round") +
@@ -147,72 +181,89 @@ animap <- ggmap(cvillemap) +
   geom_path(data = dft, color = "blueviolet", size = dft$riders * 3 + .6, lineend = "round") +
   labs(title="Month: {current_frame}") +
   transition_manual(month)
-#
+
+####the following 13 blocks of code use the same steps as above####
+####instead of mapping all 13 routes at the same time it creates a separate animation for each route####
+###this will make visualizing the change in ridership for each route a little easier####
+
+#### ANIMATION MAP FOR ROUTE 1 ####
 animapr1 <- ggmap(cvillemap) + 
   geom_path(data = df1, color = "red", size = df1$riders * 3 + .6, lineend = "round") +
   labs(title="Month: {current_frame}") +
   transition_manual(month)
-#
+#### ANIMATION MAP FOR ROUTE 2 ####
 animapr2 <- ggmap(cvillemap) + 
   geom_path(data = df2, color = "blue", size = df2$riders * 3 + .6, lineend = "round") +
   labs(title="Month: {current_frame}") +
   transition_manual(month)
-#
+
+#### ANIMATION MAP FOR ROUTE 3 ####
 animapr3 <- ggmap(cvillemap) + 
   geom_path(data = df3, color = "green", size = df3$riders * 3 + .6, lineend = "round") +
   labs(title="Month: {current_frame}") +
   transition_manual(month)
-#
+
+#### ANIMATION MAP FOR ROUTE 4 ####
 animapr4 <- ggmap(cvillemap) + 
   geom_path(data = df4, color = "coral4", size = df4$riders * 3 + .6, lineend = "round") +
   labs(title="Month: {current_frame}") +
   transition_manual(month)
-#
+
+#### ANIMATION MAP FOR ROUTE 5 ####
 animapr5 <- ggmap(cvillemap) + 
   geom_path(data = df5, color = "firebrick3", size = df5$riders * 3 + .6, lineend = "round") +
   labs(title="Month: {current_frame}") +
   transition_manual(month)
-#
+
+#### ANIMATION MAP FOR ROUTE 6 ####
 animapr6 <- ggmap(cvillemap) + 
   geom_path(data = df6, color = "gold2", size = df6$riders * 3 + .6, lineend = "round") +
   labs(title="Month: {current_frame}") +
   transition_manual(month)
-#
+
+#### ANIMATION MAP FOR ROUTE 7 ####
 animapr7 <- ggmap(cvillemap) + 
   geom_path(data = df7, color = "darkorange3", size = df7$riders * 3 + .6, lineend = "round") +
   labs(title="Month: {current_frame}") +
   transition_manual(month)
-#
+
+#### ANIMATION MAP FOR ROUTE 8 ####
 animapr8 <- ggmap(cvillemap) + 
   geom_path(data = df8, color = "darkolivegreen", size = df8$riders * 3 + .6, lineend = "round") +
   labs(title="Month: {current_frame}") +
   transition_manual(month)
-#
+
+#### ANIMATION MAP FOR ROUTE 9 ####
 animapr9 <- ggmap(cvillemap) + 
   geom_path(data = df9, color = "turquoise", size = df9$riders * 3 + .6, lineend = "round") +
   labs(title="Month: {current_frame}") +
   transition_manual(month)
-#
+
+#### ANIMATION MAP FOR ROUTE 10 ####
 animapr10 <- ggmap(cvillemap) + 
   geom_path(data = df10, color = "salmon1", size = df10$riders * 3 + .6, lineend = "round") +
   labs(title="Month: {current_frame}") +
   transition_manual(month)
-#
+
+#### ANIMATION MAP FOR ROUTE 11 ####
 animapr11 <- ggmap(cvillemap) + 
   geom_path(data = df11, color = "plum4", size = df11$riders * 3 + .6, lineend = "round") +
   labs(title="Month: {current_frame}") +
   transition_manual(month)
-#
+
+#### ANIMATION MAP FOR ROUTE 12 ####
 animapr12 <- ggmap(cvillemap) + 
   geom_path(data = df12, color = "yellow", size = df12$riders * 3 + .6, linetype = 2, lineend = "round") +
   labs(title="Month: {current_frame}") +
   transition_manual(month)
-#
+
+#### ANIMATION MAP FOR ROUTE TROLLEY ####
 animaprt <- ggmap(cvillemap) + 
   geom_path(data = dft, color = "blueviolet", size = dft$riders * 3 + .6, lineend = "round") +
   labs(title="Month: {current_frame}") +
   transition_manual(month)
-#
+
+#### saving all of the animations as gifs
 animate(animap, renderer = gifski_renderer(), fps = 1, nframes = 24)
 anim_save("animap.gif")
 animate(animapr1, renderer = gifski_renderer(), fps = 1, nframes = 24)
@@ -241,6 +292,11 @@ animate(animapr12, renderer = gifski_renderer(), fps = 1, nframes = 24)
 anim_save("animapr12.gif")
 animate(animaprt, renderer = gifski_renderer(), fps = 1, nframes = 24)
 anim_save("animaprt.gif")
+
+#### THE FOLLOWING 12 BLOCK OF CODE SAVE EACH FRAME OF THE TROLLEY ANIMATION AS A PNG ####
+#### THE PURPOSE IS TO BE ABLE TO SEE THE RIDERSHIP TRANSITION IN A COLLECTION OF PICTURES AND NOT AS AN ANIMATION ####
+#### WAS ONLY DONE WITH TROLLEY ROUTE BECAUSE ONLY TESTING THIS IDEA ####
+
 #
 dftmo <- filter(dft,month == "01-JAN")
 maprtmo <- ggmap(cvillemap) + 
@@ -315,11 +371,20 @@ maprtmo <- ggmap(cvillemap) +
 ggsave("maprt12dec.png")
 #
 
-#
+
+#### THE FOLLOWING CODE WAS USED TO CREATE AN INTERACTIVE R SHINY APPLICAITON ####
+#### THE PROGRAM ALLOWS USERS TO SELECT A ROUTE FROM THE DROP DOWN MENU ####
+#### THEY CAN THEN SEE THAT SPECIFIC ROUTE'S RIDERSHIP ANIMATION ####
+
+#install and load RShiny package
 install.packages("shiny")
 library(shiny)
 
-#
+#creating the ui of the shinyApp
+#creating the titles of the possible selections of the drop down menu
+#creating a selection for each of the 13 routes
+#also creating a selection that will show the 12 months of the trolley data as 12 separate imagea
+
 ui <- fluidPage(
   fluidRow(column(4,h3("Charlottesville Area Transit Ridership")),
            column(8,  selectInput("route", "Route:", c("All Routes" = "all"
@@ -353,12 +418,16 @@ ui <- fluidPage(
 )
 
 
-#
+#creating the server of the ShinyApp
+#this displays the specific gif that correlates to the possible selections of the drop down menu
 server <- function(input, output, session) {
   output$outRoute <- renderImage(
     {list(src=if(input$route=="all") {"animap.gif"}
           else {paste0("animap",input$route,".gif")},
           contentType = 'image/gif',width = 800,height = 600)},deleteFile = FALSE)
+  
+  #this section of code is for the final selection option
+  #this selection option displays the 12 months of the trolley data as 12 separate imagea
   output$outm01 <- renderImage({list(src="maprt01jan.png",contentType = 'image/gif',
                                      width = 200,height = 150)},deleteFile = FALSE)
   output$outm02 <- renderImage({list(src="maprt02feb.png",contentType = 'image/gif'
@@ -384,8 +453,8 @@ server <- function(input, output, session) {
   output$outm12 <- renderImage({list(src="maprt12dec.png",contentType = 'image/gif'
                                      ,width = 200,height = 150)},deleteFile = FALSE)
 }
-#
 
+#running the shinyApp
 shinyApp(ui, server)
-#
+
 
