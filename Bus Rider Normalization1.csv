@@ -1,0 +1,157 @@
+Months,Routes,Used,Needed
+01. Jan,Free Trolley,4,3
+02. Feb,Free Trolley,4,4
+03. Mar,Free Trolley,4,4
+04. Apr ,Free Trolley,4,4
+05. May,Free Trolley,4,3
+06. Jun,Free Trolley,4,3
+07. Jul,Free Trolley,4,3
+08. Aug,Free Trolley,4,3
+09. Sep,Free Trolley,4,4
+10. Oct,Free Trolley,4,4
+11. Nov,Free Trolley,4,4
+12. Dec,Free Trolley,4,3
+01. Jan,Route 1,1,1
+02. Feb,Route 1,1,1
+03. Mar,Route 1,1,1
+04. Apr ,Route 1,1,1
+05. May,Route 1,1,1
+06. Jun,Route 1,1,1
+07. Jul,Route 1,1,1
+08. Aug,Route 1,1,1
+09. Sep,Route 1,1,1
+10. Oct,Route 1,1,1
+11. Nov,Route 1,1,1
+12. Dec,Route 1,1,1
+01. Jan,Route 2,2,2
+02. Feb,Route 2,2,2
+03. Mar,Route 2,2,2
+04. Apr ,Route 2,2,2
+05. May,Route 2,2,2
+06. Jun,Route 2,2,2
+07. Jul,Route 2,2,2
+08. Aug,Route 2,2,2
+09. Sep,Route 2,2,2
+10. Oct,Route 2,2,2
+11. Nov,Route 2,2,2
+12. Dec,Route 2,2,2
+01. Jan,Route 3,2,2
+02. Feb,Route 3,2,2
+03. Mar,Route 3,2,2
+04. Apr ,Route 3,2,2
+05. May,Route 3,2,2
+06. Jun,Route 3,2,2
+07. Jul,Route 3,2,2
+08. Aug,Route 3,2,2
+09. Sep,Route 3,2,2
+10. Oct,Route 3,2,2
+11. Nov,Route 3,2,2
+12. Dec,Route 3,2,2
+01. Jan,Route 4,3,3
+02. Feb,Route 4,3,3
+03. Mar,Route 4,3,3
+04. Apr ,Route 4,3,3
+05. May,Route 4,3,3
+06. Jun,Route 4,3,2
+07. Jul,Route 4,3,3
+08. Aug,Route 4,3,3
+09. Sep,Route 4,3,3
+10. Oct,Route 4,3,3
+11. Nov,Route 4,3,3
+12. Dec,Route 4,3,2
+01. Jan,Route 5,3,3
+02. Feb,Route 5,3,3
+03. Mar,Route 5,3,3
+04. Apr ,Route 5,3,3
+05. May,Route 5,3,3
+06. Jun,Route 5,3,3
+07. Jul,Route 5,3,3
+08. Aug,Route 5,3,3
+09. Sep,Route 5,3,3
+10. Oct,Route 5,3,3
+11. Nov,Route 5,3,3
+12. Dec,Route 5,3,3
+01. Jan,Route 6,1,1
+02. Feb,Route 6,1,1
+03. Mar,Route 6,1,1
+04. Apr ,Route 6,1,1
+05. May,Route 6,1,1
+06. Jun,Route 6,1,1
+07. Jul,Route 6,1,1
+08. Aug,Route 6,1,1
+09. Sep,Route 6,1,1
+10. Oct,Route 6,1,1
+11. Nov,Route 6,1,1
+12. Dec,Route 6,1,1
+01. Jan,Route 7,5,5
+02. Feb,Route 7,5,5
+03. Mar,Route 7,5,5
+04. Apr ,Route 7,5,5
+05. May,Route 7,5,5
+06. Jun,Route 7,5,4
+07. Jul,Route 7,5,5
+08. Aug,Route 7,5,5
+09. Sep,Route 7,5,5
+10. Oct,Route 7,5,5
+11. Nov,Route 7,5,5
+12. Dec,Route 7,5,5
+01. Jan,Route 8,1,1
+02. Feb,Route 8,1,1
+03. Mar,Route 8,1,1
+04. Apr ,Route 8,1,1
+05. May,Route 8,1,1
+06. Jun,Route 8,1,1
+07. Jul,Route 8,1,1
+08. Aug,Route 8,1,1
+09. Sep,Route 8,1,1
+10. Oct,Route 8,1,1
+11. Nov,Route 8,1,1
+12. Dec,Route 8,1,1
+01. Jan,Route 9,1,1
+02. Feb,Route 9,1,1
+03. Mar,Route 9,1,1
+04. Apr ,Route 9,1,1
+05. May,Route 9,1,1
+06. Jun,Route 9,1,1
+07. Jul,Route 9,1,1
+08. Aug,Route 9,1,1
+09. Sep,Route 9,1,1
+10. Oct,Route 9,1,1
+11. Nov,Route 9,1,1
+12. Dec,Route 9,1,1
+01. Jan,Route 10,1,1
+02. Feb,Route 10,1,1
+03. Mar,Route 10,1,1
+04. Apr ,Route 10,1,1
+05. May,Route 10,1,1
+06. Jun,Route 10,1,1
+07. Jul,Route 10,1,1
+08. Aug,Route 10,1,1
+09. Sep,Route 10,1,1
+10. Oct,Route 10,1,1
+11. Nov,Route 10,1,1
+12. Dec,Route 10,1,1
+01. Jan,Route 11,1,1
+02. Feb,Route 11,1,1
+03. Mar,Route 11,1,1
+04. Apr ,Route 11,1,1
+05. May,Route 11,1,1
+06. Jun,Route 11,1,1
+07. Jul,Route 11,1,1
+08. Aug,Route 11,1,1
+09. Sep,Route 11,1,1
+10. Oct,Route 11,1,1
+11. Nov,Route 11,1,1
+12. Dec,Route 11,1,1
+01. Jan,Route 12,2,2
+02. Feb,Route 12,2,2
+03. Mar,Route 12,2,2
+04. Apr ,Route 12,2,2
+05. May,Route 12,2,2
+06. Jun,Route 12,2,2
+07. Jul,Route 12,2,1
+08. Aug,Route 12,2,1
+09. Sep,Route 12,2,1
+10. Oct,Route 12,2,2
+11. Nov,Route 12,2,2
+12. Dec,Route 12,2,2
