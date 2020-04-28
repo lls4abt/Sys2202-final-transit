@@ -1,3 +1,5 @@
+install.packages("DT")
+
 library(tidyverse)
 library(ggplot2)
 library(shiny)
@@ -6,7 +8,7 @@ library(xlsx)
 library(readr)
 library(DT)
 # getting the dataframe from excel csv
-dataFrame2 <- read_csv("C:/Users/student/Documents/SYS2202/R/RidershipByRoute.csv")
+dataFrame2 <- read_csv("/users/sisisnavely/Desktop/GitHub/Sys2202-final-transit/RidershipByRoute.csv")
 # ui code for Shiny
 ui2 <- shinyUI(fluidPage(
   titlePanel("Bus Average Ridership from 2015 to 2019"),
