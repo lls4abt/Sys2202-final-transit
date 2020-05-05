@@ -1,5 +1,7 @@
 ##### Lilleth's Portion ######
 
+##the following code is to create the animations along with the corresponding RShiny application##
+
 # install dev version of ggmap
 devtools::install_github("dkahle/ggmap")
 
